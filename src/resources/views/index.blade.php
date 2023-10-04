@@ -2,11 +2,8 @@
 
 @section('content')
     <div class="container">
-        <!-- row -->
         <div class="row">
-            <!-- ASIDE -->
             <div id="aside" class="col-md-3">
-                <!-- aside Widget -->
                 <div class="aside">
                     <h3 class="aside-title">Categorias</h3>
                     <div class="checkbox-filter">
@@ -21,13 +18,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- /aside Widget -->
             </div>
-            <!-- /ASIDE -->
-
-            <!-- STORE -->
             <div id="store" class="col-md-9">
-                <!-- store products -->
                 <div class="row">
                     @foreach ($products as $item)
                         <div class="col-md-4 col-xs-6">
@@ -48,10 +40,7 @@
                         </div>
                     @endforeach
                 </div>
-                <!-- /store products -->
             </div>
-            <!-- /STORE -->
         </div>
-        <!-- /row -->
     </div>
 @stop

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Electro - HTML Ecommerce Template</title>
+    <title>Electro - HTML Ecommerce</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
     <link type="text/css" rel="stylesheet" href="{{ asset('css/slick.css') }}" />
@@ -296,7 +296,8 @@
         var X_CSRF_TOKEN = @js(csrf_token());
         var LOADER = @js(asset('img/loader_ami.json'));
     </script>
-    <script src="js/custom/generic.js"></script>
+    <script src="{{ asset('js/custom/generic.js') }}"></script>
+    @yield('customjs')
 </body>
 
 </html>

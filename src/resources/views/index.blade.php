@@ -44,3 +44,7 @@
         </div>
     </div>
 @stop
+
+@section('customjs')
+    <script src="{{ asset('js/custom/index.js') }}"></script>
+@stop

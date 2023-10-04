@@ -31,6 +31,11 @@ $(document).ready(function () {
     });
 });
 
+/**
+ * CREA UNA PETICION AJAX GENERICO
+ * @param {*} _ajaxData 
+ * @returns 
+ */
 function ajaxRequestGenercic(_ajaxData) {
     let dataReturn = null;
     $.ajax({
@@ -48,7 +53,6 @@ function ajaxRequestGenercic(_ajaxData) {
         },
         success: function (data) {
             //SIEMPRE AL REALIZAR UNA PETICION AJAX SE REINICIA EL CONTADOR
-            updateTimeSession();
             if (_ajaxData.function != null)
                 _ajaxData.function(data);
             else
@@ -72,18 +76,11 @@ function ajaxRequestGenercic(_ajaxData) {
     return dataReturn;
 }
 
-function showLogin() {
-    $("#modal-login").modal({ backdrop: 'static', keyboard: false });
-}
-
-function showUserRegistration() {
-    $("#modal-registration").modal({ backdrop: 'static', keyboard: false });
-}
-
-function logout() {
-
-}
-
+/**
+ * VALIDA SI UN TEXTO ESTA VACIO O NULO
+ * @param {*} _string 
+ * @returns 
+ */
 function stringIsNullOrEmpty(_string) {
     try {
         let stringVal = _string.trim();
@@ -96,45 +93,12 @@ function stringIsNullOrEmpty(_string) {
     }
 }
 
-function createRegister() {
-    let register = validateFormArray(['register_name', 'register_lastname', 'register_lastname2', 'register_email', 'register_phone', 'register_password']);
-    if ($('#register_password').val() != $('#register_password_confirmation').val()) {
-        showAlertGeneric('Las contraseñas no coinciden');
-        return
-    }
-    let email = $("#register_email").val();
-    var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!emailRegex.test(email)) {
-        showAlertGeneric("Formato de correo electrónico no válido");
-        return
-    }
-    if (register != null) {
-        let ajaxData = new AjaxRequestClass(
-            API_REGISTER,
-            register,
-            "Ocurrio un error al guardar el formulario",
-            'POST',
-            true,
-            true,
-            createRegisterRequest
-        );
-
-        ajaxRequestGenercic(ajaxData);
-    }
-}
-
 /**
- * RESPUESTA DEL AJAX 
- * @param {*} _data 
+ * VALIDA LOS CAMPOS DE UNA ARREGLO DE IDS SI TIENEN DATOS
+ * @param {*} _arrayaTributes ID
+ * @param {*} _subId TEXTO ANTES DEL ID
+ * @returns 
  */
-function createRegisterRequest(_data) {
-    if (_data.status == undefined || _data.status.toUpperCase() == 'ERROR') {
-        showAlertGeneric(_data.msg, 'error');
-    } else {
-        showAlertGeneric(_data.msg, 'success');
-    }
-}
-
 function validateFormArray(_arrayaTributes, _subId = '') {
     let data = {};
     let countError = 0;
@@ -160,6 +124,12 @@ function validateFormArray(_arrayaTributes, _subId = '') {
     }
 }
 
+/**
+ * MUESTRA UN MODAL DE MENSAJE GENERICO
+ * @param {*} _msg MENSAJE A MOSTRAR
+ * @param {*} _icon ICONO DEL MODAL
+ * @param {*} _reload INDIDCA SI AL ACEPTAR SE VA RECARGAR 
+*/
 function showAlertGeneric(_msg, _icon = 'error', _reload = false) {
     modalLoaderClose();
     Swal.fire({
@@ -176,27 +146,48 @@ function showAlertGeneric(_msg, _icon = 'error', _reload = false) {
 }
 
 /**
- * Funcion que muestra el modal de carga
+ * MUESTRA EL MODAL DE CARGA
  */
 function modalLoaderOpen() {
-	$('#mod-loader').stop();
-	$('#mod-loader').show();
-	$('#mod-loader').css("opacity", 1);
-	$("#mod-loader").animate({
-		opacity: 1,
-	}, 300, function () {
+    $('#mod-loader').stop();
+    $('#mod-loader').show();
+    $('#mod-loader').css("opacity", 1);
+    $("#mod-loader").animate({
+        opacity: 1,
+    }, 300, function () {
 
-	});
+    });
 }
 
 /**
- * Funcion que cierra el modal de carga
+ * CIERRA EL MODAL DE CARGA
  */
 function modalLoaderClose() {
-	$('#mod-loader').stop();
-	$("#mod-loader").animate({
-		opacity: 0,
-	}, 300, function () {
-		$('#mod-loader').hide();
-	});
+    $('#mod-loader').stop();
+    $("#mod-loader").animate({
+        opacity: 0,
+    }, 300, function () {
+        $('#mod-loader').hide();
+    });
+}
+
+/**
+ * ABRE EL MODAL PARA EL LOGIN
+ */
+function showLogin() {
+    $("#modal-login").modal({ backdrop: 'static', keyboard: false });
+}
+
+/**
+ * ABRE EL MODAL PARA EL REGISTRO
+ */
+function showUserRegistration() {
+    $("#modal-registration").modal({ backdrop: 'static', keyboard: false });
+}
+
+/**
+ * REALIZA EL CIERRE DE SESION
+ */
+function logout() {
+
 }

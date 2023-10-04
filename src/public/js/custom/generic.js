@@ -20,6 +20,15 @@ $(document).ready(function () {
     $('.numberFormDecimal').on('input', function () {
         this.value = this.value.replace(/[^0-9,.{0,1}]/g, '').replace(/,/g, '.');
     });
+
+    lottie.loadAnimation({
+        container: document.getElementById(
+            'loaderAnim'), // the dom element that will contain the animation
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: LOADER // the path to the animation json
+    });
 });
 
 function ajaxRequestGenercic(_ajaxData) {
@@ -99,21 +108,20 @@ function createRegister() {
         showAlertGeneric("Formato de correo electrónico no válido");
         return
     }
-     if (register != null) {
-         let ajaxData = new AjaxRequestClass(
-             API_REGISTER,
-             register,
-             "Ocurrio un error al guardar el formulario",
-             'POST',
-             true,
-             true,
-             createRegisterRequest
-         );
- 
-         ajaxRequestGenercic(ajaxData);
-     }
-}
+    if (register != null) {
+        let ajaxData = new AjaxRequestClass(
+            API_REGISTER,
+            register,
+            "Ocurrio un error al guardar el formulario",
+            'POST',
+            true,
+            true,
+            createRegisterRequest
+        );
 
+        ajaxRequestGenercic(ajaxData);
+    }
+}
 
 /**
  * RESPUESTA DEL AJAX 
@@ -153,6 +161,7 @@ function validateFormArray(_arrayaTributes, _subId = '') {
 }
 
 function showAlertGeneric(_msg, _icon = 'error', _reload = false) {
+    modalLoaderClose();
     Swal.fire({
         icon: _icon,
         title: _msg,
@@ -160,7 +169,34 @@ function showAlertGeneric(_msg, _icon = 'error', _reload = false) {
         confirmButtonText: 'Aceptar',
     }).then(function (result) {
         if (_reload) {
+            modalLoaderOpen();
             window.location.reload();
         }
     });
+}
+
+/**
+ * Funcion que muestra el modal de carga
+ */
+function modalLoaderOpen() {
+	$('#mod-loader').stop();
+	$('#mod-loader').show();
+	$('#mod-loader').css("opacity", 1);
+	$("#mod-loader").animate({
+		opacity: 1,
+	}, 300, function () {
+
+	});
+}
+
+/**
+ * Funcion que cierra el modal de carga
+ */
+function modalLoaderClose() {
+	$('#mod-loader').stop();
+	$("#mod-loader").animate({
+		opacity: 0,
+	}, 300, function () {
+		$('#mod-loader').hide();
+	});
 }

@@ -7,12 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Electro - HTML Ecommerce Template</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
-    <link type="text/css" rel="stylesheet" href="css/slick.css" />
-    <link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
-    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/slick.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/slick-theme.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/nouislider.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/style.css') }}" />
 
 </head>
 
@@ -157,31 +157,38 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="register_name">Nombre</label>
-                        <input type="text" name="register_name" class="form-control input-required" id="register_name">
+                        <input type="text" name="register_name" class="form-control input-required"
+                            id="register_name">
                     </div>
                     <div class="mb-3">
                         <label for="register_lastname">Apellido Paterno</label>
-                        <input type="text" name="register_lastname" class="form-control input-required" id="register_lastname">
+                        <input type="text" name="register_lastname" class="form-control input-required"
+                            id="register_lastname">
                     </div>
                     <div class="mb-3">
                         <label for="register_lastname2">Apellido Materno</label>
-                        <input type="text" name="register_lastname2" class="form-control input-required" id="register_lastname2">
+                        <input type="text" name="register_lastname2" class="form-control input-required"
+                            id="register_lastname2">
                     </div>
                     <div class="mb-3">
                         <label for="register_email">Correo</label>
-                        <input type="text" name="register_email" class="form-control input-required" id="register_email">
+                        <input type="text" name="register_email" class="form-control input-required"
+                            id="register_email">
                     </div>
                     <div class="mb-3">
                         <label for="register_phone">Telefono</label>
-                        <input type="text" name="register_phone" class="form-control input-required numberForm" id="register_phone">
+                        <input type="text" name="register_phone" class="form-control input-required numberForm"
+                            id="register_phone">
                     </div>
                     <div class="mb-3">
                         <label for="register_password">Contraseña</label>
-                        <input type="password" name="register_password" class="form-control input-required" id="register_password">
+                        <input type="password" name="register_password" class="form-control input-required"
+                            id="register_password">
                     </div>
                     <div class="mb-3">
                         <label for="register_password_confirmation">Confirmar contraseña</label>
-                        <input type="password" name="register_password_confirmation" class="form-control input-required" id="register_password_confirmation">
+                        <input type="password" name="register_password_confirmation"
+                            class="form-control input-required" id="register_password_confirmation">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -268,16 +275,26 @@
             </div>
         </div>
     </footer>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/slick.min.js"></script>
-    <script src="js/nouislider.min.js"></script>
-    <script src="js/jquery.zoom.min.js"></script>
-    <script src="js/main.js"></script>
+    <div class="loader" id="mod-loader"
+        style="background-color:rgba(255,255,255,0.8)!important; backdrop-filter: blur(2px); ">
+        <div class="loaderCenter">
+            <div align="center">
+                <div id="loaderAnim"></div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/slick.min.js') }}"></script>
+    <script src="{{ asset('js/nouislider.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.zoom.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script>
+    <script src="{{ asset('/plugins/player/lottie.min.js') }}"></script>
+    <script>
         var API_REGISTER = @js(route('register'));
         var X_CSRF_TOKEN = @js(csrf_token());
+        var LOADER = @js(asset('img/loader_ami.json'));
     </script>
     <script src="js/custom/generic.js"></script>
 </body>

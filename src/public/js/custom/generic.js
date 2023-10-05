@@ -98,7 +98,7 @@ function ajaxRequestGenercic(_ajaxData) {
             if (msg == 'Expired token' || msg == 'Invalid token') {
                 modalLoaderClose();
                 Swal.fire({
-                    icon: error,
+                    icon: 'error',
                     title: msg,
                     allowOutsideClick: false,
                     confirmButtonText: 'Aceptar',
@@ -109,7 +109,6 @@ function ajaxRequestGenercic(_ajaxData) {
             } else {
                 showAlertGeneric(msg, 'error');
             }
-
         },
     });
 
@@ -243,7 +242,7 @@ function showUserRegistration() {
 function logout() {
     let ajaxData = new AjaxRequestClass(
         API_LOGOUT,
-        login,
+        {},
         "Ocurrio un error al cerrar la sesion",
         'POST',
         true,
@@ -265,6 +264,7 @@ function logoutRequest(_data) {
         session = 0;
         showButtons()
         showAlertGeneric(_data.msg, 'success');
+        openNewView(window.location.origin);
     }
 }
 
@@ -382,9 +382,9 @@ function deleteToCartProduct(_productId) {
     });
     shopping_carts = new_shopping_carts;
     updateDataCart();
-    if (typeof updateOrder === "function") 
+    if (typeof updateOrder === "function")
         updateOrder();
-    
+
     showAlertGeneric('Producto eliminado del carrito', 'success');
 }
 

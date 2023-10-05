@@ -48,6 +48,10 @@ function addItemOrder(_item, _product) {
     return div1;
 }
 
+/**
+ * REALIZA LA COMPRE DE LOS PRODCUTOS EN EL CARRITO
+ * @returns 
+ */
 function buyCartList() {
 
     if (shopping_carts.length == 0) {
@@ -70,16 +74,41 @@ function buyCartList() {
     let buyForm = validateFormArray(['recipient_name', 'address', 'city', 'state', 'postal_code']);
 
     if (buyForm != null) {
-        /*let ajaxData = new AjaxRequestClass(
-            API_LOGIN,
-            login,
+        let ajaxData = new AjaxRequestClass(
+            API_BUYCARTLIST,
+            { shopping_carts: shopping_carts, buy_form: buyForm },
             "Ocurrio un error al iniciar sesion",
             'POST',
             true,
             true,
-            loginRequest
+            buyCartListRequest
         );
 
-        ajaxRequestGenercic(ajaxData);*/
+        ajaxRequestGenercic(ajaxData);
     }
 }
+
+/**
+ * RESPUESTA DEL AJAX 
+ * @param {*} _data 
+ */
+function buyCartListRequest(_data) {
+    if (_data.status == undefined || _data.status.toUpperCase() == 'ERROR') {
+        showAlertGeneric(_data.msg, 'error');
+    } else {
+        shopping_carts = [];
+        updateDataCart();
+        modalLoaderClose();
+        Swal.fire({
+            icon: 'success',
+            title: _data.msg,
+            allowOutsideClick: false,
+            confirmButtonText: 'Aceptar',
+        }).then(function (result) {
+            modalLoaderOpen();
+            location.href = window.location.origin;
+        });
+    }
+}
+
+

@@ -88,7 +88,7 @@ function loginRequest(_data) {
             updateDataCart();
         } else {
             //SI NO HAY SE TOMA DE LA BASE DE DATOS
-            shopping_carts = _data.data.shopping_cart;
+            shopping_carts = _data.data;
             updateDataCart();
         }
 

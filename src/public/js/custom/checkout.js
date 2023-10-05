@@ -59,8 +59,8 @@ function buyCartList() {
         return;
     }
 
-    let paymentMethod = $("input[name='paymentMethod']:checked").val();
-    if (typeof paymentMethod === "undefined") {
+    let payment_method = $("input[name='paymentMethod']:checked").val();
+    if (typeof payment_method === "undefined") {
         showAlertGeneric('Debes seleccionar un metodo de pago', 'warning');
         return;
     }
@@ -72,6 +72,7 @@ function buyCartList() {
     }
 
     let buyForm = validateFormArray(['recipient_name', 'address', 'city', 'state', 'postal_code']);
+    buyForm.payment_method = payment_method;
 
     if (buyForm != null) {
         let ajaxData = new AjaxRequestClass(

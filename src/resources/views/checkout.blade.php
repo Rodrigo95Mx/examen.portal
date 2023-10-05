@@ -48,7 +48,7 @@
                 </div>
                 <div class="payment-method">
                     <div class="input-radio">
-                        <input type="radio" name="paymentMethod" id="payment_1" value="1">
+                        <input type="radio" name="paymentMethod" id="payment_1" value="Tranferencia">
                         <label for="payment_1">
                             <span></span>
                             Tranferencia Bancaria
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="input-radio">
-                        <input type="radio" name="paymentMethod" id="payment_2" value="2">
+                        <input type="radio" name="paymentMethod" id="payment_2" value="Paypal">
                         <label for="payment_2">
                             <span></span>
                             Paypal

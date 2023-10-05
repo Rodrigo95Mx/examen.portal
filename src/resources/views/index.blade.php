@@ -25,7 +25,7 @@
                         <div class="col-md-4 col-xs-6">
                             <div class="product">
                                 <div class="product-img">
-                                    <img src="{{ $item['image_url'] }}" alt="">
+                                    <img src="{{ asset($item['image_url']) }}" alt="">
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-name"><a href="#">{{ $item['name'] }}</a></h3>

@@ -87,8 +87,22 @@ function ajaxRequestGenercic(_ajaxData) {
             } else {
                 msg = err.responseJSON.msg;
             }
+            debugger
+            if (msg == 'Expired token' || msg == 'Invalid token') {
+                modalLoaderClose();
+                Swal.fire({
+                    icon: error,
+                    title: msg,
+                    allowOutsideClick: false,
+                    confirmButtonText: 'Aceptar',
+                }).then(function (result) {
+                    modalLoaderOpen();
+                    logout();
+                });
+            } else {
+                showAlertGeneric(msg, 'error');
+            }
 
-            showAlertGeneric(msg, 'error');
         },
     });
 
@@ -141,6 +155,18 @@ function validateFormArray(_arrayaTributes, _subId = '') {
     } else {
         return data;
     }
+}
+
+/**
+ * LIMPIA UN FORMULARIO
+ * @param {*} _arrayaTributes 
+ * @param {*} _subId 
+ * @returns 
+ */
+function clearForm(_arrayaTributes, _subId = '') {
+    _arrayaTributes.forEach(element => {
+        $(`#${_subId}${element}`).val('');
+    });
 }
 
 /**
@@ -208,20 +234,17 @@ function showUserRegistration() {
  * REALIZA EL CIERRE DE SESION
  */
 function logout() {
-    let login = validateFormArray(['login_email', 'login_password']);
-    if (login != null) {
-        let ajaxData = new AjaxRequestClass(
-            API_LOGOUT,
-            login,
-            "Ocurrio un error al cerrar la sesion",
-            'POST',
-            true,
-            true,
-            logoutRequest
-        );
+    let ajaxData = new AjaxRequestClass(
+        API_LOGOUT,
+        login,
+        "Ocurrio un error al cerrar la sesion",
+        'POST',
+        true,
+        true,
+        logoutRequest
+    );
 
-        ajaxRequestGenercic(ajaxData);
-    }
+    ajaxRequestGenercic(ajaxData);
 }
 
 /**

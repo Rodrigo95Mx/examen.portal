@@ -47,8 +47,9 @@ class EcommerceController extends Controller
 
     public function checkSession()
     {
-        if (session_status() === PHP_SESSION_NONE)
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
+        }
 
         if (isset($_SESSION['token']) && isset($_SESSION['session_id']) && isset($_SESSION['expired_at'])) {
             if ($_SESSION['token'] != '' && $_SESSION['session_id'] != '' && $_SESSION['expired_at'] != '') {
@@ -87,22 +88,48 @@ class EcommerceController extends Controller
 
     public function logout(Request $request)
     {
-        //try {
-        if ($this->checkSession()) {
-            //SOLICITAR LA API PARA CERRAR SESSION
-            $url = env('API_URL_BASE') . 'logout';
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $_SESSION['token'],
-                'session-id' => $_SESSION['session_id']
-            ])->post($url, []);
-            $json_custom = json_decode($response->body(), true);           
-        }
-        //MATAR SESION
-        session_destroy();
-        return response()->json(['status' => 'success', 'msg' =>  'Session cerrada'], 200);
-        /*} catch (\Throwable $th) {
+        try {
+            if ($this->checkSession()) {
+                //SOLICITAR LA API PARA CERRAR SESSION
+                $url = env('API_URL_BASE') . 'logout';
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $_SESSION['token'],
+                    'session-id' => $_SESSION['session_id']
+                ])->post($url, []);
+                $json_custom = json_decode($response->body(), true);
+            }
+            //MATAR SESION
+            session_destroy();
+            return response()->json(['status' => 'success', 'msg' =>  'Session cerrada'], 200);
+        } catch (\Throwable $th) {
             return response()->json(['status' => 'error', 'msg' =>  'Internal Server Error'], 500);
-        }*/
+        }
+    }
+
+    public function updateShoppingCartDataBase(Request $request)
+    {
+        try {
+            $input = $request->all();
+            if ($this->checkSession()) {
+
+                //ACTUALIZAR EL CARRITO
+                $url = env('API_URL_BASE') . 'shoppingcart/update';
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $_SESSION['token'],
+                    'session-id' => $_SESSION['session_id']
+                ])->post($url, $input);
+                $json_custom = json_decode($response->body(), true);
+                if ($json_custom['status'] == 'success') {
+                    return response()->json(['status' => 'success', 'msg' =>  'Carrito actualizado'], 200);
+                } else {
+                    return response()->json($json_custom, $response->status());
+                }
+            }
+            return response()->json(['status' => 'error', 'msg' =>  'Expired token'], 401);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'error', 'msg' =>  'Internal Server Error'], 500);
+        }
     }
 }

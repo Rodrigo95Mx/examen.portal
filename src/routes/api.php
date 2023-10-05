@@ -19,3 +19,4 @@ Route::post('/registro', [EcommerceController::class, 'register'])->name('regist
 Route::post('/login', [EcommerceController::class, 'login'])->name('login');
 
 Route::post('/logout', [EcommerceController::class, 'logout'])->name('logout');
+Route::post('/carrito/actualizar', [EcommerceController::class, 'updateShoppingCartDataBase'])->name('updateShoppingCartDataBase');

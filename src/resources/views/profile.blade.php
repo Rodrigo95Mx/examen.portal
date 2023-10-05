@@ -68,7 +68,7 @@
 @stop
 
 @section('modals')
-    <!--MODAL LOGIN-->
+    <!--MODAL DETALLE COMPRA-->
     <div class="modal fade" id="modal-purchase-detail">
         <div class="modal-dialog">
             <div class="modal-content">

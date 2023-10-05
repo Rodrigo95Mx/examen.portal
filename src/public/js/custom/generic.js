@@ -262,8 +262,6 @@ function logoutRequest(_data) {
         showAlertGeneric(_data.msg, 'error');
     } else {
         session = 0;
-        showButtons()
-        showAlertGeneric(_data.msg, 'success');
         openNewView(window.location.origin);
     }
 }

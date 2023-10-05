@@ -1,8 +1,8 @@
-var shopping_carts = [];
-
 $(document).ready(function () {
     $("#btnCart").hide();
     $("#link_logout").hide();
+    $("#btnMyAccount").hide();
+    $("#btnHome").show();
     updateOrder();
 })
 

@@ -39,11 +39,38 @@ class EcommerceController extends Controller
 
             $data = [
                 'products' => isset($json_custom['data']) ? $json_custom['data']['product_list'] : [],
-                'session' => 0
+                'session' => 1
             ];
-
-            $data['session'] = 1;
             return view('checkout', $data);
+        }
+        return redirect('/');
+    }
+
+    public function purchaseHistory(Request $request)
+    {
+        if ($this->checkSession()) {
+            $url = env('API_URL_BASE') . 'ecommerce/products/list';
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->post($url);
+            $json_custom_products = json_decode($response->body(), true);
+
+            $url = env('API_URL_BASE') . 'shoppingcart/history';
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $_SESSION['token'],
+                'session-id' => $_SESSION['session_id'],
+                'Content-Type' => 'application/json'
+            ])->post($url);
+            $json_custom_history = json_decode($response->body(), true);
+
+            $data = [
+                'products' => isset($json_custom_products['data']) ? $json_custom_products['data']['product_list'] : [],
+                'history' => isset($json_custom_history['data']) ? $json_custom_history['data']['history'] : [],
+                'user' => isset($json_custom_history['data']) ? $json_custom_history['data']['user'] : [],
+                'session' => 1
+            ];
+            
+            return view('profile', $data);
         }
         return redirect('/');
     }

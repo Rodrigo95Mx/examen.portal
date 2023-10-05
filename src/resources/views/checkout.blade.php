@@ -85,8 +85,6 @@
 
 @section('customjs')
     <script>
-        var product_list = @js($products);
-        var session = @js($session);
         var API_BUYCARTLIST = @js(route('buyCartList'));
     </script>
     <script src="{{ asset('js/custom/checkout.js') }}"></script>

@@ -69,7 +69,7 @@ class EcommerceController extends Controller
                 'user' => isset($json_custom_history['data']) ? $json_custom_history['data']['user'] : [],
                 'session' => 1
             ];
-            
+
             return view('profile', $data);
         }
         return redirect('/');
@@ -188,6 +188,28 @@ class EcommerceController extends Controller
 
                 //ACTUALIZAR EL CARRITO
                 $url = env('API_URL_BASE') . 'shoppingcart/buy';
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $_SESSION['token'],
+                    'session-id' => $_SESSION['session_id']
+                ])->post($url, $input);
+                $json_custom = json_decode($response->body(), true);
+                return response()->json($json_custom, $response->status());
+            }
+            return response()->json(['status' => 'error', 'msg' =>  'Expired token'], 401);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'error', 'msg' =>  'Internal Server Error'], 500);
+        }
+    }
+
+    public function purchaseDetails(Request $request)
+    {
+        try {
+            $input = $request->all();
+            if ($this->checkSession()) {
+
+                //ACTUALIZAR EL CARRITO
+                $url = env('API_URL_BASE') . 'shoppingcart/purchase/details';
                 $response = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $_SESSION['token'],

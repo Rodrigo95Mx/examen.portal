@@ -12,6 +12,8 @@ class AjaxRequestClass {
 }
 
 $(document).ready(function () {
+    //MOSTRAR Y OCULTAR BOTONES SEGUN LA SESION
+    showButtons();
     //FORMATO DE NUMERO SIN DECIMAL EN EL INPUT
     $('.numberForm').on('input', function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -30,6 +32,23 @@ $(document).ready(function () {
         path: LOADER // the path to the animation json
     });
 });
+
+/**
+ * MUESTRA/OCULTA BOTONES DE ACUERDO A LA SESION
+ */
+function showButtons() {
+    if (session == 1) {
+        $("#link_logout").show();
+        $("#btnMyAccount").show();
+        $("#link_login").hide();
+        $("#link_register").hide();
+    } else {
+        $("#link_login").show();
+        $("#link_register").show();
+        $("#link_logout").hide();
+        $("#btnMyAccount").hide();
+    }
+}
 
 /**
  * CREA UNA PETICION AJAX GENERICO
@@ -189,5 +208,32 @@ function showUserRegistration() {
  * REALIZA EL CIERRE DE SESION
  */
 function logout() {
+    let login = validateFormArray(['login_email', 'login_password']);
+    if (login != null) {
+        let ajaxData = new AjaxRequestClass(
+            API_LOGOUT,
+            login,
+            "Ocurrio un error al cerrar la sesion",
+            'POST',
+            true,
+            true,
+            logoutRequest
+        );
 
+        ajaxRequestGenercic(ajaxData);
+    }
+}
+
+/**
+ * RESPUESTA DEL AJAX 
+ * @param {*} _data 
+ */
+function logoutRequest(_data) {
+    if (_data.status == undefined || _data.status.toUpperCase() == 'ERROR') {
+        showAlertGeneric(_data.msg, 'error');
+    } else {
+        session = 0;
+        showButtons()
+        showAlertGeneric(_data.msg, 'success');
+    }
 }

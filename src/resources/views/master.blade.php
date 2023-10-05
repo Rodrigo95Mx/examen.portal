@@ -26,11 +26,16 @@
                     <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
                 </ul>
                 <ul class="header-links pull-right">
-                    <li><a onclick="showUserRegistration()" style="cursor:pointer;"><i class="fa fa-user"></i>
-                            Registro</a></li>
-                    <li><a onclick="showLogin()" style="cursor:pointer;"><i class="fa fa-sign-in"></i> Iniciar
-                            sesion</a></li>
-                    <li><a onclick="logout()" style="cursor:pointer;"><i class="fa fa-sign-out"></i> Cerrar sesion</a>
+                    <li id="link_register" style="display:none;">
+                        <a onclick="showUserRegistration()" style="cursor:pointer;"><i class="fa fa-user"></i>
+                            Registro</a>
+                    </li>
+                    <li id="link_login" style="display:none;">
+                        <a onclick="showLogin()" style="cursor:pointer;"><i class="fa fa-sign-in"></i> Iniciar
+                            sesion</a>
+                    </li>
+                    <li id="link_logout" style="display:none;">
+                        <a onclick="logout()" style="cursor:pointer;"><i class="fa fa-sign-out"></i> Cerrar sesion</a>
                     </li>
                 </ul>
             </div>
@@ -49,7 +54,7 @@
                     </div>
                     <div class="col-md-3 clearfix">
                         <div class="header-ctn">
-                            <div>
+                            <div id="btnMyAccount" style="display:none;">
                                 <a href="#">
                                     <i class="fa fa-user-circle"></i>
                                     <span>Mi cuenta</span>
@@ -62,7 +67,7 @@
                                     <div class="qty">3</div>
                                 </a>
                                 <div class="cart-dropdown">
-                                    <div class="cart-list">
+                                    <div class="cart-list" id="cartList">
                                         <div class="product-widget">
                                             <div class="product-img">
                                                 <img src="./img/product01.png" alt="">
@@ -92,8 +97,8 @@
                                         <h5>SUBTOTAL: $2940.00</h5>
                                     </div>
                                     <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+                                        <a href="#">Ver Carrito</a>
+                                        <a href="#">Comprar <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +140,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success btn-wAuto" onclick="saveCommission()">
+                    <button type="button" class="btn btn-success btn-wAuto" onclick="login()">
                         Iniciar session
                     </button>
                 </div>
@@ -292,9 +297,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('/plugins/player/lottie.min.js') }}"></script>
     <script>
-        var API_REGISTER = @js(route('register'));
         var X_CSRF_TOKEN = @js(csrf_token());
         var LOADER = @js(asset('img/loader_ami.json'));
+        var API_REGISTER = @js(route('register'));
+        var API_LOGIN = @js(route('login'));
+        var API_LOGOUT = @js(route('logout'));
+        var session = @js($session);
     </script>
     <script src="{{ asset('js/custom/generic.js') }}"></script>
     @yield('customjs')

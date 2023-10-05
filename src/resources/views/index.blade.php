@@ -30,10 +30,10 @@
                                 <div class="product-body">
                                     <h3 class="product-name"><a href="#">{{ $item['name'] }}</a></h3>
                                     <h4 class="product-price">${{ number_format($item['price'], 2, '.', ',') }}</h4>
-
                                 </div>
                                 <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Agregar al
+                                    <button class="add-to-cart-btn" onclick="addToCart({{ $item['id'] }})"><i
+                                            class="fa fa-shopping-cart"></i> Agregar al
                                         carrito</button>
                                 </div>
                             </div>
@@ -46,5 +46,9 @@
 @stop
 
 @section('customjs')
+    <script>
+        var product_list = @js($products);
+        var session = @js($session);
+    </script>
     <script src="{{ asset('js/custom/index.js') }}"></script>
 @stop

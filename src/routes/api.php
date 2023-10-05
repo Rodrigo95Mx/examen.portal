@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/registro', [EcommerceController::class, 'register'])->name('register');
+Route::post('/login', [EcommerceController::class, 'login'])->name('login');
+
+Route::post('/logout', [EcommerceController::class, 'logout'])->name('logout');

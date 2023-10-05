@@ -28,6 +28,26 @@ class EcommerceController extends Controller
         return view('index', $data);
     }
 
+    public function checkout(Request $request)
+    {
+        if ($this->checkSession()) {
+            $url = env('API_URL_BASE') . 'ecommerce/products/list';
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->post($url);
+            $json_custom = json_decode($response->body(), true);
+
+            $data = [
+                'products' => isset($json_custom['data']) ? $json_custom['data']['product_list'] : [],
+                'session' => 0
+            ];
+
+            $data['session'] = 1;
+            return view('checkout', $data);
+        }
+        return redirect('/');
+    }
+
     public function register(Request $request)
     {
         $input = $request->all();

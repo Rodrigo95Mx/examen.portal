@@ -45,7 +45,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="header-logo">
-                            <a href="#" class="logo">
+                            <a onclick="openNewView('{{route('index')}}')" class="logo">
                                 <img src="{{asset('img/logo.png')}}" alt="">
                             </a>
                         </div>
@@ -60,7 +60,7 @@
                                     <span>Mi cuenta</span>
                                 </a>
                             </div>
-                            <div class="dropdown">
+                            <div class="dropdown" id="btnCart">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Mi carrito</span>
@@ -74,8 +74,8 @@
                                         <h5 id="totalAmountCart">SUBTOTAL: $0.00</h5>
                                     </div>
                                     <div class="cart-btns">
-                                        <a href="#">Ver Carrito</a>
-                                        <a href="#">Comprar <i class="fa fa-arrow-circle-right"></i></a>
+                                        <a style="cursor: default">&nbsp;&nbsp;</a>
+                                        <a onclick="buyCart('{{route('checkout')}}')">Comprar <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
                                 </div>
                             </div>

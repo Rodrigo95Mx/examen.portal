@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [EcommerceController::class, 'index'])->name('index');
+Route::get('/checkout', [EcommerceController::class, 'checkout'])->name('checkout');

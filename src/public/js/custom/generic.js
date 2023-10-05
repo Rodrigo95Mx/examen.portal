@@ -1,3 +1,5 @@
+var shopping_carts = [];
+
 class AjaxRequestClass {
     constructor(_url, _data, _msgError, _type = 'POST', _showLoader = false, _async = false, _function = null, _renewSession = true) {
         this.url = _url;
@@ -31,6 +33,12 @@ $(document).ready(function () {
         autoplay: true,
         path: LOADER // the path to the animation json
     });
+
+    let dataLocal = localStorage.getItem("shopping_carts");
+    if (dataLocal != null) {
+        shopping_carts = JSON.parse(dataLocal);
+        updateDataCart();
+    }
 });
 
 /**
@@ -87,7 +95,6 @@ function ajaxRequestGenercic(_ajaxData) {
             } else {
                 msg = err.responseJSON.msg;
             }
-            debugger
             if (msg == 'Expired token' || msg == 'Invalid token') {
                 modalLoaderClose();
                 Swal.fire({
@@ -258,5 +265,153 @@ function logoutRequest(_data) {
         session = 0;
         showButtons()
         showAlertGeneric(_data.msg, 'success');
+    }
+}
+
+/**
+ * ABRE UNA NUEVA VISTA
+ * @param {*} _url 
+ */
+function openNewView(_url) {
+    //ABRIR MODAL DE CARGANDO
+    modalLoaderOpen();
+    //REDIRIGIR A LA NUEVA VISTA
+    location.href = _url;
+}
+
+/**
+ * DIRIGE A LA PAGINA PARA REALIZAR LA COMPRA
+ * @param {*} _url 
+ */
+function buyCart(_url) {
+    if (session == 1) {
+        if (shopping_carts.length > 0)
+            openNewView(_url);
+        else
+            showAlertGeneric('Debes agregar al menos un producto al carrito', 'warning');
+    } else {
+        showAlertGeneric('Inicia sesion para poder completar la compra', 'warning');
+    }
+}
+
+/**
+ * ACTUALIZA LOS DATOS DEL CARRITO
+ */
+function updateDataCart() {
+    let container = document.getElementById("cartList");
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+    let countItemsCart = 0;
+    let totalAmountCart = 0;
+    shopping_carts.forEach(item => {
+        let product = product_list.find((object) => object.id == item.product_id);
+        container.appendChild(addToCartProduct(item, product));
+        countItemsCart = countItemsCart + item.quantity;
+        totalAmountCart = parseFloat(totalAmountCart + (item.quantity * product.price));
+    });
+    $('#countItemsCart').text(countItemsCart);
+    $('#countItemsCartText').text(`${countItemsCart} Articulo(s) Seleccionados`);
+    $('#totalAmountCart').text(`SUBTOTAL: ${totalAmountCart.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}`);
+    //GUARDAR CARRITO EN LOCALSTORAGE
+    localStorage.setItem("shopping_carts", JSON.stringify(shopping_carts));
+    if (session == 1) {
+        //SI ESTA INICIADA LA SESION SE ACTUALIZA EL CARRITO EN LA BASE DE DATOS
+        updateShoppingCartDataBase();
+    }
+}
+
+/**
+ * AGREGA UN PRODUCTO AL CARRITO DE COMPRA
+ * @param {*} _item 
+ * @param {*} _product 
+ * @returns 
+ */
+function addToCartProduct(_item, _product) {
+    let div1 = document.createElement('div');
+    div1.className = 'product-widget';
+
+    let div2 = document.createElement('div');
+    div2.className = 'product-img';
+    let img = document.createElement('img');
+    img.src = _product.image_url;
+    div2.appendChild(img)
+
+    let div3 = document.createElement('div');
+    div3.className = 'product-body';
+    let h3 = document.createElement('h3');
+    h3.className = 'product-name';
+    let a = document.createElement('a');
+    a.innerText = _product.name;
+    h3.appendChild(a);
+    let h4 = document.createElement('h4');
+    h4.className = 'product-price';
+    let span1 = document.createElement('span');
+    span1.className = 'qty';
+    span1.innerText = `${_item.quantity}x`;
+    let span2 = document.createElement('span');
+    span2.innerText = parseFloat(_product.price).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+    h4.appendChild(span1);
+    h4.appendChild(span2);
+    div3.appendChild(h3);
+    div3.appendChild(h4);
+
+    let button = document.createElement('button');
+    button.className = 'delete';
+    let i = document.createElement('i');
+    i.className = 'fa fa-close';
+    button.setAttribute('onclick', `deleteToCartProduct(${_item.product_id})`);
+    button.appendChild(i);
+
+    div1.appendChild(div2);
+    div1.appendChild(div3);
+    div1.appendChild(button);
+
+    return div1;
+}
+
+/**
+ * ELIMINA UN PRODUCTO DEL CARRITO
+ * @param {*} _productId 
+ */
+function deleteToCartProduct(_productId) {
+    let new_shopping_carts = [];
+    shopping_carts.forEach(element => {
+        if (element.product_id != _productId)
+            new_shopping_carts.push(element);
+    });
+    shopping_carts = new_shopping_carts;
+    updateDataCart();
+    if (typeof updateOrder === "function") 
+        updateOrder();
+    
+    showAlertGeneric('Producto eliminado del carrito', 'success');
+}
+
+/**
+ * ACTUALIZA EL CARRITO DE COMPRA EN LA BASE DE DATOS
+ * @returns 
+ */
+function updateShoppingCartDataBase() {
+    let ajaxData = new AjaxRequestClass(
+        API_UPDATESHOPPINGCART,
+        { shopping_carts: shopping_carts },
+        "Ocurrio un error al iniciar sesion",
+        'POST',
+        false,
+        true,
+        updateShoppingCartDataBaseRequest
+    );
+
+    ajaxRequestGenercic(ajaxData);
+}
+
+/**
+ * RESPUESTA DEL AJAX 
+ * @param {*} _data 
+ */
+function updateShoppingCartDataBaseRequest(_data) {
+    if (_data.status == undefined || _data.status.toUpperCase() == 'ERROR') {
+        showAlertGeneric(_data.msg, 'error');
     }
 }

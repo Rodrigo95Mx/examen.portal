@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+
 });
 
 /**
@@ -121,4 +121,104 @@ function addToCart(_productId) {
     }
     updateDataCart();
     showAlertGeneric('Producto agregado al carrito', 'success');
+}
+
+/**
+ * FUNCION DE ENVIAR MENSAJE
+ */
+function sendMessage() {
+    let textMenssageSend = $('#textMenssageSend').val();
+    if (!stringIsNullOrEmpty(textMenssageSend)) {
+        addSenderMessage(textMenssageSend);
+        $('#textMenssageSend').val('');
+    }
+}
+
+/**
+ * AGREGA UN MENSAJE DEL USUARIO
+ * @param {*} _message 
+ */
+function addSenderMessage(_message) {
+    let div1 = document.createElement('div');
+    div1.className = 'message sender-message';
+    div1.style.float = 'left';
+    div1.style.width = '100%';
+
+    let span = document.createElement('span');
+    span.innerText = 'Tu:';
+
+    let div2 = document.createElement('div');
+    div2.innerText = _message;
+
+    div1.appendChild(span);
+    div1.appendChild(div2);
+
+    let container = document.getElementById("containerMessage");
+    container.appendChild(div1);
+
+    $('.Messages').animate({
+        scrollTop: 9999
+    }, 'slow');
+
+    sendMessageToGPT3(_message);
+}
+
+/**
+ * AGREGA UN MENSAJE DEL BOT
+ * @param {*} _message 
+ */
+function addReceivingMessage(_message) {
+    let div1 = document.createElement('div');
+    div1.className = 'message sender-message';
+    div1.style.float = 'right';
+    div1.style.width = '100%';
+
+    let span = document.createElement('span');
+    span.innerText = 'Bot:';
+
+    let div2 = document.createElement('div');
+    div2.innerText = _message;
+
+    div1.appendChild(span);
+    div1.appendChild(div2);
+
+    let container = document.getElementById("containerMessage");
+    container.appendChild(div1);
+
+    $('.Messages').animate({
+        scrollTop: 9999
+    }, 'slow');
+}
+
+/**
+ * REALIZA EL ENVIO A CHAT GPT
+ * @param {*} userMessage 
+ */
+async function sendMessageToGPT3(userMessage) {
+    const url = 'https://api.openai.com/v1/chat/completions'; // Cambia el motor según tus necesidades
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+    };
+
+    const requestBody = {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: userMessage }],
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(requestBody)
+        });
+        if (response.ok) {
+            const data = await response.json();
+            addReceivingMessage(data.choices[0].message.content);
+        } else {
+            console.log('Error al enviar el mensaje a GPT-3.');
+        }
+    } catch (error) {
+        console.log('Error en la solicitud: ', error);
+    }
 }
